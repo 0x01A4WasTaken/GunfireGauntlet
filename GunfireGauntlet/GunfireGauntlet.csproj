@@ -46,15 +46,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameWindow.cs">
+    <Compile Include="Engine\Entity\Entity.cs" />
+    <Compile Include="Engine\Entity\Player\Player.cs" />
+    <Compile Include="Engine\Entity\Sprite.cs" />
+    <Compile Include="Engine\Essentials\Position.cs" />
+    <Compile Include="Engine\GameWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GameWindow.Designer.cs">
+    <Compile Include="Engine\GameWindow.Designer.cs">
       <DependentUpon>GameWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Engine\Physics\Collider.cs" />
+    <Compile Include="Engine\Physics\Velocity.cs" />
+    <Compile Include="Engine\Tile\Tile.cs" />
+    <Compile Include="Engine\Tile\TileManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="GameWindow.resx">
+    <EmbeddedResource Include="Engine\GameWindow.resx">
       <DependentUpon>GameWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
