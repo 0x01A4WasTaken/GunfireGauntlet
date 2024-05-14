@@ -3,21 +3,26 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using GunfireGauntlet.Engine.Essentials;
+using GunfireGauntlet.Engine.Tile;
 
 namespace GunfireGauntlet
 {
     public partial class GameWindow : Form
     {
-        private int originalTileSize = 16; // 16x16
-        private int tileScale = 3;
+        private int originalTileSize = 16;          // 16x16
+        private int tileScale = 5;
         private int tileSize;
 
-        private int tileColumns = 27; // number of columns
-        private int tileRows = 15; // number of rows
+        private int tileColumns = 50;               // number of columns
+        private int tileRows = 25;                  // number of rows
 
-        private string title = "Gunfire Gauntlet";
+        private string title = "Gunfire Gauntlet";  // window title
 
         private Player player;
+
+        private KeyHandler keyHandler = new KeyHandler();
+
+        private TileManager tileManager = new TileManager();
 
         public GameWindow()
         {
@@ -25,26 +30,28 @@ namespace GunfireGauntlet
 
             InitializeComponent();
             Text = title;
-            Size = new Size(tileSize * tileColumns, tileSize * tileRows);
+            Size = new Size(1980, 1080);
+            DoubleBuffered = true;
         }
 
         private void LoadForm(object sender, EventArgs e) // Start
         {
-            player = new Player(new Position(10, 10), 100, 100);
+            player = new Player(new Vector2(10, 10), 100, 100);    // Creating Player
+            
         }
-
         private void GameLoop(object sender, EventArgs e) // Update
         {
-            Console.WriteLine(player.Position.ToString());
+            keyHandler.KeyDetection();
+            player.CheckMovementKeys(keyHandler.w, keyHandler.a, keyHandler.s, keyHandler.d);
+
+            Invalidate();
         }
 
         private void OnPaint(object sender, PaintEventArgs e) // Draw
         {
             Graphics g = e.Graphics;
 
-            RectangleF destinationRect = new RectangleF(player.Position.X, player.Position.Y,player.Width,player.Height);
-            g.DrawImage(player.GetImage(), 10, 10, 32, 32);
+            player.Draw(g);
         }
-        
     }
 }
