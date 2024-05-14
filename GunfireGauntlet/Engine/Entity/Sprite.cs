@@ -19,9 +19,14 @@ namespace GunfireGauntlet.Engine.Entity
             this.width = width;
         }
 
-        public virtual void SetImage(string path)
+        public void SetImage(string path)
         {
             image = Image.FromFile(Directory.GetCurrentDirectory() + path);
+        }
+
+        public void SetImage(Image image)
+        {
+            this.image = image;
         }
 
         public Image GetImage() { return image; }

@@ -54,10 +54,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1894, 1009);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "GameWindow";
             this.Text = "GunfireGauntlet";
-            this.Load += new System.EventHandler(this.LoadForm);
+            this.Load += new System.EventHandler(this.OnLoad);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
             this.ResumeLayout(false);
             this.PerformLayout();

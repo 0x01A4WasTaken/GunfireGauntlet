@@ -18,7 +18,7 @@ namespace GunfireGauntlet
 
         private string title = "Gunfire Gauntlet";  // window title
 
-        private Player player;
+        private Player player = new Player(new Vector2(10, 10), 108, 64);
 
         private KeyHandler keyHandler = new KeyHandler();
 
@@ -34,15 +34,12 @@ namespace GunfireGauntlet
             DoubleBuffered = true;
         }
 
-        private void LoadForm(object sender, EventArgs e) // Start
-        {
-            player = new Player(new Vector2(10, 10), 100, 100);    // Creating Player
-            
-        }
         private void GameLoop(object sender, EventArgs e) // Update
         {
             keyHandler.KeyDetection();
+
             player.CheckMovementKeys(keyHandler.w, keyHandler.a, keyHandler.s, keyHandler.d);
+            player.Update();
 
             Invalidate();
         }
@@ -52,6 +49,11 @@ namespace GunfireGauntlet
             Graphics g = e.Graphics;
 
             player.Draw(g);
+        }
+
+        private void OnLoad(object sender, EventArgs e)
+        {
+
         }
     }
 }

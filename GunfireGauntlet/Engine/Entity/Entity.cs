@@ -12,21 +12,38 @@ namespace GunfireGauntlet.Engine.Entity
     {
         private Vector2 position;
 
-        private bool visible;
+        private bool visible = true;
 
-        public Entity(Vector2 position, int height, int width, string path) : base(height, width)
+        public int spriteCounter { get; set; }
+        public int spriteNumber { get; set; }
+        
+        private bool animated;
+
+        public Entity(Vector2 position, int height, int width, bool animated) : base(height, width)
         {
             this.position = position;
-            base.SetImage(path);
+            this.animated = animated;
+            spriteCounter = 0;
+            spriteNumber = 0;
         }
 
         public Vector2 GetPosition() { return position; }
         public void SetPosition(Vector2 value) { position = value; }
         public void SetPosition(float x, float y) { position = new Vector2(x, y); }
 
-        public void Draw(Graphics g)
+        public virtual void Update()
         {
+            if (animated)
+                spriteCounter++;
+        }
+
+        public virtual void Draw(Graphics g)
+        {
+            if (!visible)
+                return;
+
             SolidBrush brush = new SolidBrush(Color.Black);
+
             if (GetImage() == null)
                 g.DrawRectangle(new Pen(brush), position.GetX(), position.GetY(), GetWidth(), GetHeight());
             else
