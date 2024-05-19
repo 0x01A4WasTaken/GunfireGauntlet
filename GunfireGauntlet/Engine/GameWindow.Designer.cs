@@ -31,12 +31,14 @@
             this.components = new System.ComponentModel.Container();
             this.tmrGameLoop = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
+            this.lblCol = new System.Windows.Forms.Label();
+            this.lblMap = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // tmrGameLoop
             // 
             this.tmrGameLoop.Enabled = true;
-            this.tmrGameLoop.Interval = 20;
+            this.tmrGameLoop.Interval = 1;
             this.tmrGameLoop.Tick += new System.EventHandler(this.GameLoop);
             // 
             // label1
@@ -48,11 +50,32 @@
             this.label1.Size = new System.Drawing.Size(0, 25);
             this.label1.TabIndex = 0;
             // 
+            // lblCol
+            // 
+            this.lblCol.AutoSize = true;
+            this.lblCol.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCol.Location = new System.Drawing.Point(1438, 69);
+            this.lblCol.Name = "lblCol";
+            this.lblCol.Size = new System.Drawing.Size(169, 61);
+            this.lblCol.TabIndex = 1;
+            this.lblCol.Text = "label2";
+            // 
+            // lblMap
+            // 
+            this.lblMap.AutoSize = true;
+            this.lblMap.Location = new System.Drawing.Point(1364, 353);
+            this.lblMap.Name = "lblMap";
+            this.lblMap.Size = new System.Drawing.Size(70, 25);
+            this.lblMap.TabIndex = 2;
+            this.lblMap.Text = "label2";
+            // 
             // GameWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1894, 1009);
+            this.Controls.Add(this.lblMap);
+            this.Controls.Add(this.lblCol);
             this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "GameWindow";
@@ -68,6 +91,8 @@
 
         private System.Windows.Forms.Timer tmrGameLoop;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblCol;
+        private System.Windows.Forms.Label lblMap;
     }
 }
 

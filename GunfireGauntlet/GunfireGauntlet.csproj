@@ -66,6 +66,7 @@
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Engine\Physics\Collider.cs" />
+    <Compile Include="Engine\Tile\MapConvertor.cs" />
     <Compile Include="Engine\Tile\Tile.cs" />
     <Compile Include="Engine\Tile\TileManager.cs" />
     <Compile Include="Program.cs" />
