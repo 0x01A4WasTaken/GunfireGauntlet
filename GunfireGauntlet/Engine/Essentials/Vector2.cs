@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace GunfireGauntlet.Engine.Essentials
 {
-    internal class Vector2
+    public class Vector2
     {
         private float x;
         private float y;
+        public float X { get { return x; } set { x = value; } }
+        public float Y { get { return y; } set { y = value; } }
 
         public Vector2(float x, float y)
         {
@@ -24,11 +26,6 @@ namespace GunfireGauntlet.Engine.Essentials
             this.y = value.y;
         }
 
-        public float GetX() {  return x; }
-        public float GetY() { return y; }
-        public void SetX(float x) { this.x = x; }
-        public void SetY(float y) { this.y = y; }
-
         static public Vector2 Zero()
         {
             Vector2 zero = new Vector2(0, 0);
@@ -36,8 +33,8 @@ namespace GunfireGauntlet.Engine.Essentials
         }
         static public Vector2 Add(Vector2 value1, Vector2 value2)
         {
-            float newx = value1.GetX() + value2.GetX();
-            float newy = value1.GetY() + value2.GetY();
+            float newx = value1.X + value2.X;
+            float newy = value1.Y + value2.Y;
             return new Vector2(newx, newy);
         }
     }

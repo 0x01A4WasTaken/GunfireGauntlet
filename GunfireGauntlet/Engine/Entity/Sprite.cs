@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 namespace GunfireGauntlet.Engine.Entity
 {
-    internal class Sprite
+    public class Sprite
     {
         private int height;
         private int width;

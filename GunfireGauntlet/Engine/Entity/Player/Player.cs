@@ -17,11 +17,13 @@ using System.Windows.Media.Media3D;
 
 namespace GunfireGauntlet.Engine.Entity.Player
 {
-    internal class Player : Entity
+    public class Player : Entity
     {
         private Image[] playerSprites = new Image[20];
         private int speed = 10;
-        private Vector2 newPos;
+        private Vector2 nextPos;
+
+        public int health { get; private set; } = 5;
 
         public int Speed { get; internal set; }
         private Vector2 velocity;
@@ -36,8 +38,10 @@ namespace GunfireGauntlet.Engine.Entity.Player
         private string spriteDirection = "right";
 
         public bool isMoving { get; private set; }
+        private bool hit = false;
+        public bool Hit { get { return hit; } set { hit = value; } }
 
-        public Player(Vector2 position, int height, int width) : base(position, height, width, true)
+        public Player(Vector2 position, int height, int width) : base(position, height, width, true, "player")
         {
             try
             {
@@ -64,7 +68,8 @@ namespace GunfireGauntlet.Engine.Entity.Player
                 MessageBox.Show("Player Sprites Not Found");
             }
             isMoving = false;
-            newPos = GetPosition();
+            nextPos = GetPosition();
+            Collider.Active = true;
         }
 
         public override void Update()
@@ -98,51 +103,58 @@ namespace GunfireGauntlet.Engine.Entity.Player
                 spriteCounter = 0;
             }
             
-            if (!Collider.CheckCollision(this, Entity.entities, (int)newPos.GetX(), (int)newPos.GetY(), GetWidth(), GetHeight()))
+            if (!Collider.CheckCollisionTagExclusion(this, Entity.entities, (int)nextPos.X, (int)nextPos.Y, GetWidth(), GetHeight(), "enemy"))
             {
                 SetPosition(Vector2.Add(GetPosition(), velocity));
             }
             velocity = Vector2.Zero();
-            newPos = GetPosition();
+            nextPos = GetPosition();
 
-            if (Collider.CheckCollision(this, Entity.entities))
+            if (Collider.CheckCollisionTagExclusion(this, Entity.entities, "enemy"))
             {
                 SetPosition(Collider.oldx, Collider.oldy);
             }
         }
 
-        public void CheckMovementKeys(bool w, bool a, bool s, bool d, bool space)
+        public void TakeDamage(int value)
+        {
+            int newHealth = health - value;
+            if (newHealth < 0)
+                health = 0;
+            else
+                health = newHealth;
+        }
+
+        public void CheckMovementKeys(bool w, bool a, bool s, bool d)
         {
             ColliderUpdater();
-            if (space == true)
-                SetPosition(new Vector2(100, 100));
             if (w == true)
             {
-                newPos = new Vector2(newPos.GetX(), newPos.GetY() - speed);
-                velocity.SetY(-speed);
+                nextPos = new Vector2(nextPos.X, nextPos.Y - speed);
+                velocity.Y = -speed;
                 isMoving = true;
                 up = true;
             }
             if (a == true)
             {
-                newPos = new Vector2(newPos.GetX() - speed, newPos.GetY());
-                velocity.SetX(-speed);
+                nextPos = new Vector2(nextPos.X - speed, nextPos.Y);
+                velocity.X = -speed;
                 isMoving = true;
                 left = true;
                 spriteDirection = "left";
             }
             if (s == true)
-            {
-                newPos = new Vector2(newPos.GetX(), newPos.GetY() + speed);
-                velocity.SetY(speed);
+            {   
+                nextPos = new Vector2(nextPos.X, nextPos.Y + speed);
+                velocity.Y = speed;
                 isMoving = true;
                 down = true;
             }
 
             if (d == true)
             {
-                newPos = new Vector2(newPos.GetX() + speed, newPos.GetY());
-                velocity.SetX(speed);
+                nextPos = new Vector2(nextPos.X + speed, nextPos.Y);
+                velocity.X = speed;
                 isMoving = true;
                 right = true;
                 spriteDirection = "right";
@@ -201,9 +213,6 @@ namespace GunfireGauntlet.Engine.Entity.Player
                     }
             }
             base.Draw(g);
-            SolidBrush brush = new SolidBrush(Color.FromArgb((byte)100, (byte)0, (byte)0, (byte)255));
-            g.FillRectangle(brush, newPos.GetX(), newPos.GetY(), GetWidth(), GetHeight());
-            
         }
     }
 }

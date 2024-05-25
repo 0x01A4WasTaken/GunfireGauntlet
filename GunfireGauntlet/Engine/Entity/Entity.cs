@@ -11,10 +11,12 @@ using System.Windows.Forms;
 
 namespace GunfireGauntlet.Engine.Entity
 {
-    internal class Entity : Sprite
+    public class Entity : Sprite
     {
         static private List<Entity> entityList = new List<Entity>();
         static public List<Entity> entities { get { return entityList; } }
+
+        public string tag { get; private set; }
 
         private Vector2 position;
 
@@ -27,15 +29,18 @@ namespace GunfireGauntlet.Engine.Entity
 
         private Collider col;
         public Collider Collider { get { return col; } set { col = value; } }
+        public SolidBrush defaultBrush = new SolidBrush(Color.Black);
 
-        public Entity(Vector2 position, int height, int width, bool animated) : base(height, width)
+        public Entity(Vector2 position, int height, int width, bool animated, string tag) : base(height, width)
         {
             this.position = position;
             this.animated = animated;
             spriteCounter = 0;
             spriteNumber = 0;
-            col = new Collider(GetPosition().GetY(), GetPosition().GetY() + GetHeight(), GetPosition().GetX() + GetWidth(), GetPosition().GetX());
+            col = new Collider(GetPosition().Y, GetPosition().Y + GetHeight(), GetPosition().X + GetWidth(), GetPosition().X);
             entityList.Add(this);
+            this.tag = tag;
+
         }
 
         #region getters&setters
@@ -51,7 +56,7 @@ namespace GunfireGauntlet.Engine.Entity
 
         public Collider GetCollider() { return col; }
 
-        public void UpdateColliderValues() { col.SetValues(position.GetY(), position.GetY() + GetHeight(), position.GetX() + GetWidth(), position.GetX()); }
+        public void UpdateColliderValues() { col.SetValues(position.Y, position.Y + GetHeight(), position.X + GetWidth(), position.X); }
         public void UpdateOldColliderValues() { col.SetOldValues(col.left, col.top); }
         #endregion
 
@@ -72,12 +77,12 @@ namespace GunfireGauntlet.Engine.Entity
             if (!visible)
                 return;
 
-            SolidBrush brush = new SolidBrush(Color.Black);
+
 
             if (GetImage() == null)
-                g.FillRectangle(brush, position.GetX(), position.GetY(), GetWidth(), GetHeight());
+                g.FillRectangle(defaultBrush, position.X, position.Y, GetWidth(), GetHeight());
             else
-                g.DrawImage(GetImage(), position.GetX(), position.GetY(), GetWidth(), GetHeight());
+                g.DrawImage(GetImage(), position.X, position.Y, GetWidth(), GetHeight());
         }
 
         public void DrawCollider(Graphics g)
