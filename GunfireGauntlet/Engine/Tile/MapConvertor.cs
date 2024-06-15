@@ -7,29 +7,26 @@ using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace GunfireGauntlet.Engine.Tile
 {
     class MapConvertor
     {
-        static public void MaptoArray(ref int[,] array)
+        static public void MaptoArray(ref string[,] array)
         {
             try
             {
                 int i = 0;
                 string data;
-                StreamReader streamReader = new StreamReader(Directory.GetCurrentDirectory() + @"\map01.txt");
+                StreamReader streamReader = new StreamReader(Directory.GetCurrentDirectory() + @"\map01.csv");
                 while((data = streamReader.ReadLine()) != null)
                 {
-                    int j = 0;
-                    string[] lineSplit = data.Split(' ');
-                    foreach(string s in lineSplit)
+                    string[] s = data.Split(';');
+                    for(int j = 0; j < s.Length; j++)
                     {
-
-                        int value = int.Parse(s);
-                        array[i, j] = value;
-                        j++;
+                        array[i, j] = s[j];
                     }
                     i++;
                 }
@@ -41,28 +38,18 @@ namespace GunfireGauntlet.Engine.Tile
             }
         }
 
-        static public void MapLoader(ref List<Entity.Entity> entities, int[,] map, int tileSize)
+        static public void MapLoader(ref List<Entity.Entity> entities, string[,] map, int tileSize)
         {
-            for(int i = 0; i < 30; i++)         // y
+            for(int i = 0; i < GameWindow.ROWS; i++)         // rows 
             {
-                for(int j = 0; j < 30; j++)     // x
+                for(int j = 0; j < GameWindow.COLUMNS; j++)     // columns
                 {
-                    if (map[i, j] == 1)
+                    if (TileManager.tileTemplates[map[i, j]].tile == true)
                     {
-                        Entity.Entity e = new Entity.Entity(new Essentials.Vector2(j * tileSize, i * tileSize), tileSize, tileSize, false, "tile");
-                        e.Collider.Active = true;
-                        entities.Add(e);
-                    }
-                    if (map[i, j] == 0)
-                    {
-                        Entity.Entity e = new Entity.Entity(new Essentials.Vector2(j * tileSize, i * tileSize), tileSize, tileSize, false, "tile");
-                        e.defaultBrush = new SolidBrush(Color.FromArgb((byte)100, (byte)117, (byte)32, (byte)4));
-                        entities.Add(e);
-                    }
-                    if (map[i, j] == 2)
-                    {
-                        Entity.Entity e = new Entity.Entity(new Essentials.Vector2(j * tileSize, i * tileSize), tileSize, tileSize, false, "tile");
-                        e.defaultBrush = new SolidBrush(Color.FromArgb((byte)100, (byte)4, (byte)130, (byte)200));
+                        Essentials.Vector2 pos = new Essentials.Vector2(j * GameWindow.TILESIZE, i * GameWindow.TILESIZE);
+                        Tile e = new Tile(pos, tileSize, tileSize, TileManager.tileTemplates[map[i, j]].type);
+                        e.Collider.Solid= TileManager.tileTemplates[map[i, j]].solid;
+                        e.defaultBrush = TileManager.tileTemplates[map[i, j]].brush;
                         entities.Add(e);
                     }
                 }

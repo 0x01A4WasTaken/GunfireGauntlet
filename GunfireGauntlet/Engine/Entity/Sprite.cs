@@ -11,6 +11,24 @@ namespace GunfireGauntlet.Engine.Entity
     {
         private int height;
         private int width;
+        public int Height { get { return height; } 
+            set 
+            {
+                if (value > 0)
+                    height = value;
+                else
+                    height = 1;
+            } 
+        }
+        public int Width { get { return width; } 
+            set 
+            {
+                if (value > 0)
+                    width = value;
+                else
+                    width = 1;
+            } 
+        }
         private Image image;
 
         public Sprite(int height, int width) 
@@ -30,10 +48,5 @@ namespace GunfireGauntlet.Engine.Entity
         }
 
         public Image GetImage() { return image; }
-        public int GetHeight() { return height; }
-        public int GetWidth() { return width; }
-        public void SetHeight(int value) { height = value; }
-        public void SetWidth(int value) { width = value; }
-
     }
 }

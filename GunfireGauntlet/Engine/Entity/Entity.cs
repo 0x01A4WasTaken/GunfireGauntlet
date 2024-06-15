@@ -3,11 +3,11 @@ using GunfireGauntlet.Engine.Physics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace GunfireGauntlet.Engine.Entity
 {
@@ -19,8 +19,17 @@ namespace GunfireGauntlet.Engine.Entity
         public string tag { get; private set; }
 
         private Vector2 position;
+        public Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
+        private Vector2 velocity = new Vector2(0,0);
+        public Vector2 Velocity { get { return velocity; } set { velocity = value; } } 
 
         private bool visible = true;
+        public Vector2 Center { get { return new Vector2(position.X + Width / 2, position.Y + Height / 2); } }
 
         public int spriteCounter { get; set; }
         public int spriteNumber { get; set; }
@@ -29,7 +38,7 @@ namespace GunfireGauntlet.Engine.Entity
 
         private Collider col;
         public Collider Collider { get { return col; } set { col = value; } }
-        public SolidBrush defaultBrush = new SolidBrush(Color.Black);
+        public SolidBrush defaultBrush = new SolidBrush(System.Drawing.Color.Black);
 
         public Entity(Vector2 position, int height, int width, bool animated, string tag) : base(height, width)
         {
@@ -37,26 +46,13 @@ namespace GunfireGauntlet.Engine.Entity
             this.animated = animated;
             spriteCounter = 0;
             spriteNumber = 0;
-            col = new Collider(GetPosition().Y, GetPosition().Y + GetHeight(), GetPosition().X + GetWidth(), GetPosition().X);
+            col = new Collider(this);
             entityList.Add(this);
-            this.tag = tag;
-
+            this.tag = tag.ToLower();
         }
 
         #region getters&setters
-        public Vector2 GetPosition() { return position; }
-        public void SetPosition(Vector2 value) 
-        { 
-            position = value;
-        }
-        public void SetPosition(float x, float y) 
-        {
-            position = new Vector2(x, y); 
-        }
 
-        public Collider GetCollider() { return col; }
-
-        public void UpdateColliderValues() { col.SetValues(position.Y, position.Y + GetHeight(), position.X + GetWidth(), position.X); }
         public void UpdateOldColliderValues() { col.SetOldValues(col.left, col.top); }
         #endregion
 
@@ -69,7 +65,6 @@ namespace GunfireGauntlet.Engine.Entity
         public void ColliderUpdater()
         {
             UpdateOldColliderValues();
-            UpdateColliderValues();
         }
 
         public virtual void Draw(Graphics g)
@@ -77,21 +72,31 @@ namespace GunfireGauntlet.Engine.Entity
             if (!visible)
                 return;
 
+            if (GetImage() == null)
+                g.FillRectangle(defaultBrush, position.X, position.Y, Width, Height);
+            else
+                g.DrawImage(GetImage(), position.X, position.Y, Width, Height);
+        }
+        
+        public virtual void Draw(Graphics g, Vector2 offset)
+        {
+            if (!visible)
+                return;
 
+            Vector2 spriteOffset = Vector2.Add(offset, position);
 
             if (GetImage() == null)
-                g.FillRectangle(defaultBrush, position.X, position.Y, GetWidth(), GetHeight());
+                g.FillRectangle(defaultBrush, spriteOffset.X, spriteOffset.Y, Width, Height);
             else
-                g.DrawImage(GetImage(), position.X, position.Y, GetWidth(), GetHeight());
+                g.DrawImage(GetImage(), spriteOffset.X, spriteOffset.Y, Width, Height);
         }
 
         public void DrawCollider(Graphics g)
         {
-            SolidBrush brushRed = new SolidBrush(Color.FromArgb((byte)100, (byte)255, (byte)0, (byte)0));
-            SolidBrush brushGreen = new SolidBrush(Color.FromArgb((byte)100, (byte)0, (byte)255, (byte)0));
-            Collider col = GetCollider();
+            SolidBrush brushRed = new SolidBrush(System.Drawing.Color.FromArgb((byte)100, (byte)255, (byte)0, (byte)0));
+            SolidBrush brushGreen = new SolidBrush(System.Drawing.Color.FromArgb((byte)100, (byte)0, (byte)255, (byte)0));
             Rectangle colRect = new Rectangle((int)col.left, (int)col.top, (int)col.right - (int)col.left, (int)col.bottom - (int)col.top);
-            Rectangle colRectOld = new Rectangle((int)col.oldx, (int)col.oldy, (int)GetWidth(), (int)GetHeight());
+            Rectangle colRectOld = new Rectangle((int)col.old_x, (int)col.old_y, (int)Width, (int)Height);
             g.FillRectangle(brushRed, colRect);
             g.FillRectangle(brushGreen, colRectOld);
         }

@@ -3,42 +3,73 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using System.Windows.Forms;
 
 namespace GunfireGauntlet.Engine.Essentials
 {
-    internal class KeyHandler
+    public static class KeyHandler
     {
-        public bool w { get; private set; }         // up
-        public bool allowW = true;
-        public bool a { get; private set; }         // left
-        public bool allowA = true;
-        public bool s { get; private set; }         // down
-        public bool allowS = true;
-        public bool d { get; private set; }         // right
-        public bool allowD = true;
-        public bool esc { get; private set; }       // escape
-        public bool allowEsc = true;
-        public bool space { get; private set; }     // space
-        public bool allowSpace = true;
-        public bool shift { get; private set; }     // shift
-        public bool allowShift = true;
-        public bool one { get; private set; }       // 1
-        public bool allowOne = true;
-        public bool two { get; private set; }       // 2
-        public bool allowTwo = true;
+        public static bool w { get; private set; }         // up
+        public static bool allowW = true;
+        public static bool a { get; private set; }         // left
+        public static bool allowA = true;
+        public static bool s { get; private set; }         // down
+        public static bool allowS = true;
+        public static bool d { get; private set; }         // right
+        public static bool allowD = true;
+        public static bool esc { get; private set; }       // escape
+        public static bool allowEsc = true;
+        public static bool space { get; private set; }     // space
+        public static bool allowSpace = true;
+        public static bool shift { get; private set; }     // shift
+        public static bool allowShift = true;
+        public static bool one { get; private set; }       // 1
+        public static bool allowOne = true;
+        public static bool two { get; private set; }       // 2
+        public static bool allowTwo = true;
 
-        public void KeyDetection()
+        public static void KeyDetectionDown(KeyEventArgs e)
         {
-            w = ((Keyboard.GetKeyStates(Key.W) & KeyStates.Down) > 0 & allowW) ? true : false;
-            a = ((Keyboard.GetKeyStates(Key.A) & KeyStates.Down) > 0 & allowA) ? true : false;
-            s = ((Keyboard.GetKeyStates(Key.S) & KeyStates.Down) > 0 & allowS) ? true : false;
-            d = ((Keyboard.GetKeyStates(Key.D) & KeyStates.Down) > 0 & allowD) ? true : false;
-            esc = ((Keyboard.GetKeyStates(Key.Escape) & KeyStates.Down) > 0 & allowEsc) ? true : false;
-            space = ((Keyboard.GetKeyStates(Key.Space) & KeyStates.Down) > 0 & allowSpace) ? true : false;
-            shift = ((Keyboard.GetKeyStates(Key.LeftShift) & KeyStates.Down) > 0 & allowShift) ? true : false;
-            one = ((Keyboard.GetKeyStates(Key.D1) & KeyStates.Down) > 0 & allowOne) ? true : false;
-            two = ((Keyboard.GetKeyStates(Key.D2) & KeyStates.Down) > 0 & allowTwo) ? true : false;
+            if ((e.KeyCode == Keys.W) & allowW)
+                w = true;
+            if ((e.KeyCode == Keys.A) & allowA)
+                a = true;
+            if ((e.KeyCode == Keys.S) & allowS)
+                s = true;
+            if ((e.KeyCode == Keys.D) & allowD)
+                d = true;
+            if ((e.KeyCode == Keys.Escape) & allowEsc)
+                esc = true;
+            if ((e.KeyCode == Keys.Space) & allowSpace)
+                space = true;
+            if ((e.KeyCode == Keys.LShiftKey) & allowShift)
+                shift = true;
+            if ((e.KeyCode == Keys.D1) & allowOne)
+                one = true;
+            if ((e.KeyCode == Keys.D2) & allowTwo)
+                two = true;
+        }
+
+        public static void KeyDetectionUp(KeyEventArgs e)
+        {
+            if ((e.KeyCode == Keys.W) & allowW)
+                w = false;
+            if ((e.KeyCode == Keys.A) & allowA)
+                a = false;
+            if ((e.KeyCode == Keys.S) & allowS)
+                s = false;
+            if ((e.KeyCode == Keys.D) & allowD)
+                d = false;
+            if ((e.KeyCode == Keys.Escape) & allowEsc)
+                esc = false;
+            if ((e.KeyCode == Keys.Space) & allowSpace)
+                space = false;
+            if ((e.KeyCode == Keys.LShiftKey) & allowShift)
+                shift = false;
+            if ((e.KeyCode == Keys.D1) & allowOne)
+                one = false;
+            if ((e.KeyCode == Keys.D2) & allowTwo)
+                two = false;
         }
     }
 }

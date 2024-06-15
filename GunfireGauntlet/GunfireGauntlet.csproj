@@ -51,6 +51,8 @@
     <Compile Include="Engine\Entity\Enemies\Enemy.cs" />
     <Compile Include="Engine\Entity\Entity.cs" />
     <Compile Include="Engine\Entity\Player\Player.cs" />
+    <Compile Include="Engine\Entity\Weapons\Bullet.cs" />
+    <Compile Include="Engine\Entity\Weapons\Weapon.cs" />
     <Compile Include="Engine\Entity\Sprite.cs" />
     <Compile Include="Engine\Essentials\KeyHandler.cs" />
     <Compile Include="Engine\Essentials\Vector2.cs" />
