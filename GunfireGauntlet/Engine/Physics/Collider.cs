@@ -88,7 +88,7 @@ namespace GunfireGauntlet.Engine.Physics
 
         private void ResolveCollision(Entity.Entity e)                                  // resolves collisions for non tile entities
         {
-            if (e.tag == "tile" || !e.Collider.Solid)
+            if (e.Tag == "tile" || !e.Collider.Solid)
                 return;
 
             entityCollisionVector.X = entity.Center.X - e.Center.X;

@@ -93,6 +93,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="bin\Debug\map01.csv" />
+    <None Include="bin\Debug\map01_overlay.csv" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -252,6 +254,93 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\wall_outer_front_left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_hit_f0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_hit_f1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_idle_f0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_idle_f1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_idle_f2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_idle_f3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_idle_f4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_idle_f5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_idle_f6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_idle_f7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_run_f0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_run_f1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_run_f2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_run_f3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_run_f4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_run_f5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_run_f6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_run_f7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\weapon_katana.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\weapon_katana_left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\weapon_katana_right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chort_run_anim_f0_right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chort_run_anim_f1_right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chort_run_anim_f2_right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chort_run_anim_f3_right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chort_run_anim_f0_left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chort_run_anim_f1_left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chort_run_anim_f2_left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chort_run_anim_f3_left.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

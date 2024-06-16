@@ -37,12 +37,14 @@ namespace GunfireGauntlet
             TileManager.SettingTiles();
             World.GenerateMap(sEntities);
 
+            BackColor = Color.FromArgb((byte)255, (byte)34, (byte)34, (byte)34);
+
             InitializeComponent();      // this stays at the end
         }
 
         private void OnLoad(object sender, EventArgs e)
         {
-            player.Health = 5;
+            player.Health = 6;
             Text = title;
             Size = new Size(tileColumns * TILESIZE, tileRows * TILESIZE);
             tmrGameLoop.Enabled = true;
@@ -69,8 +71,6 @@ namespace GunfireGauntlet
             
             SpawnEnemies(5);
 
-            lblDebug.Text = player.Health.ToString();
-
             UIManager.SetHearts();
 
             if (player.Health <= 0)
@@ -84,11 +84,11 @@ namespace GunfireGauntlet
             Random rnd = new Random();
             while (enemies.Count < max)
             {
-                int x = rnd.Next(0, World.COLUMNS * TILESIZE);
-                int y = rnd.Next(0, World.ROWS * TILESIZE);
-                Enemy e = new Enemy(new Vector2(x, y), 50, 50, false);
-                if (!e.Collider.CheckCollision(Entity.entities).Collider.Solid &&
-                    !e.Collider.TileCollisionDetection())
+                int x = rnd.Next(TILESIZE, (World.COLUMNS - 1) * TILESIZE);
+                int y = rnd.Next(TILESIZE, (World.ROWS - 1) * TILESIZE);
+                Vector2 distanceFromPlayer = new Vector2(Math.Abs(x - player.Position.X), Math.Abs(y - player.Position.Y));
+                Enemy e = new Enemy(new Vector2(x, y), 69, 48);
+                if (e.Collider.CheckCollision(Entity.entities).Collider.Solid && e.Tag == "tile" || distanceFromPlayer.Magnitude <= 100)
                     e.Remove();
                 else
                     enemies.Add(e);
@@ -113,26 +113,32 @@ namespace GunfireGauntlet
 
             foreach(Entity _e in Entity.entities)
             {
-                if (_e.tag == "tile")
+                if (_e.Tag == "tile")
                     _e.Draw(g, drawOffset);
             }
             foreach (Entity _e in Entity.entities)
             {
-                if (_e.tag == "enemy")
+                if (_e.Tag == "enemy")
                     _e.Draw(g, drawOffset);
             }
             foreach (Entity _e in Entity.entities)
             {
-                if (_e.tag == "weapon")
+                if (_e.Tag == "weapon")
                     _e.Draw(g, drawOffset);
             }
             foreach (Entity _e in Entity.entities)
             {
-                if (_e.tag == "bullet")
+                if (_e.Tag == "bullet")
                     _e.Draw(g, drawOffset);
             }
 
             player.Draw(g);
+
+            foreach(Entity _e in Entity.entities)
+            {
+                if (_e.Tag == "tileOverlay")
+                    _e.Draw(g, drawOffset);
+            }
 
             UIManager.Draw(g);
         }

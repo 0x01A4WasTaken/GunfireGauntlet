@@ -63,6 +63,86 @@ namespace GunfireGauntlet.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap chort_run_anim_f0_left {
+            get {
+                object obj = ResourceManager.GetObject("chort_run_anim_f0_left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap chort_run_anim_f0_right {
+            get {
+                object obj = ResourceManager.GetObject("chort_run_anim_f0_right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap chort_run_anim_f1_left {
+            get {
+                object obj = ResourceManager.GetObject("chort_run_anim_f1_left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap chort_run_anim_f1_right {
+            get {
+                object obj = ResourceManager.GetObject("chort_run_anim_f1_right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap chort_run_anim_f2_left {
+            get {
+                object obj = ResourceManager.GetObject("chort_run_anim_f2_left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap chort_run_anim_f2_right {
+            get {
+                object obj = ResourceManager.GetObject("chort_run_anim_f2_right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap chort_run_anim_f3_left {
+            get {
+                object obj = ResourceManager.GetObject("chort_run_anim_f3_left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap chort_run_anim_f3_right {
+            get {
+                object obj = ResourceManager.GetObject("chort_run_anim_f3_right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap edge_down {
             get {
                 object obj = ResourceManager.GetObject("edge_down", resourceCulture);
@@ -496,6 +576,36 @@ namespace GunfireGauntlet.Properties {
         internal static System.Drawing.Bitmap wall_top_right {
             get {
                 object obj = ResourceManager.GetObject("wall_top_right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap weapon_katana {
+            get {
+                object obj = ResourceManager.GetObject("weapon_katana", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap weapon_katana_left {
+            get {
+                object obj = ResourceManager.GetObject("weapon_katana_left", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap weapon_katana_right {
+            get {
+                object obj = ResourceManager.GetObject("weapon_katana_right", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
