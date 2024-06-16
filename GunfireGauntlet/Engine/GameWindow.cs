@@ -2,12 +2,14 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using GunfireGauntlet.Engine.Essentials;
+using GunfireGauntlet.Engine.Helper;
+using GunfireGauntlet.Engine.Input;
 using GunfireGauntlet.Engine.Tile;
-using GunfireGauntlet.Engine.Physics;
 using GunfireGauntlet.Engine.Entity;
 using System.Collections.Generic;
 using GunfireGauntlet.Engine.Entity.Enemies;
+using System.Linq;
+using GunfireGauntlet.Engine.UI;
 
 namespace GunfireGauntlet
 {
@@ -21,9 +23,6 @@ namespace GunfireGauntlet
         private string title = "Gunfire Gauntlet";          // window title
 
         // world
-        public static string[,] map = new string[20, 20];
-        public const int ROWS = 20;
-        public const int COLUMNS = 20;
         Vector2 drawOffset = new Vector2();                 // for the camera to move around the map there needs to be an offset
 
         public static Player player = new Player(new Vector2(200, 200), 81, 48);
@@ -33,27 +32,21 @@ namespace GunfireGauntlet
 
         public GameWindow()
         {
-
             DoubleBuffered = true;
 
             TileManager.SettingTiles();
-            MapConvertor.MaptoArray(ref map);
-            MapConvertor.MapLoader(ref sEntities, map, TILESIZE);
-
-            Enemy e0 = new Enemy(new Vector2(200, 200), 50, 50, false);
-            e0.Collider.Solid = true;
-            Enemy e1 = new Enemy(new Vector2(200, 500), 50, 50, false);
-            e1.Collider.Solid = true;
-            enemies.Add(e0);
-            enemies.Add(e1);
+            World.GenerateMap(sEntities);
 
             InitializeComponent();      // this stays at the end
         }
 
         private void OnLoad(object sender, EventArgs e)
         {
+            player.Health = 5;
             Text = title;
             Size = new Size(tileColumns * TILESIZE, tileRows * TILESIZE);
+            tmrGameLoop.Enabled = true;
+            player.Position = new Vector2(TILESIZE * World.COLUMNS / 2, TILESIZE * World.ROWS / 2);
         }
 
         private void GameLoop(object sender, EventArgs e) // Update
@@ -63,37 +56,85 @@ namespace GunfireGauntlet
             drawOffset.X = Screen.PrimaryScreen.Bounds.Width / 2 - player.Center.X;
             drawOffset.Y = Screen.PrimaryScreen.Bounds.Height / 2 - player.Center.Y;
 
-            foreach(Enemy _e in enemies)
+            foreach(Enemy _e in enemies.ToList())
             {
                 _e.Update();
-            }
 
-            lblDebug.Text = player.health.ToString();
+                if (_e.health == 0)
+                {
+                    _e.Remove();
+                    enemies.Remove(_e);
+                }
+            }
+            
+            SpawnEnemies(5);
+
+            lblDebug.Text = player.Health.ToString();
+
+            UIManager.SetHearts();
+
+            if (player.Health <= 0)
+                GameOver();
 
             Invalidate();
+        }
+
+        private void SpawnEnemies(int max)
+        {
+            Random rnd = new Random();
+            while (enemies.Count < max)
+            {
+                int x = rnd.Next(0, World.COLUMNS * TILESIZE);
+                int y = rnd.Next(0, World.ROWS * TILESIZE);
+                Enemy e = new Enemy(new Vector2(x, y), 50, 50, false);
+                if (!e.Collider.CheckCollision(Entity.entities).Collider.Solid &&
+                    !e.Collider.TileCollisionDetection())
+                    e.Remove();
+                else
+                    enemies.Add(e);
+            }
+        }
+
+        public void GameOver()
+        {
+            tmrGameLoop.Enabled = false;
+            Engine.MainMenu mainMenu = new Engine.MainMenu();
+            mainMenu.Show();
+            foreach (Entity e in enemies.ToList()) { e.Remove(); }
+            KeyHandler.ResetAllKeys();
+
+            enemies.Clear();
+            Hide();
         }
 
         private void OnPaint(object sender, PaintEventArgs e) // Draw
         {
             Graphics g = e.Graphics;
 
-            foreach(Entity _e in sEntities)
-            {
-                _e.Draw(g, drawOffset);
-            }
-
-            foreach (Enemy _e in enemies)
-            {
-                _e.Draw(g, drawOffset);
-            }
-
             foreach(Entity _e in Entity.entities)
+            {
+                if (_e.tag == "tile")
+                    _e.Draw(g, drawOffset);
+            }
+            foreach (Entity _e in Entity.entities)
+            {
+                if (_e.tag == "enemy")
+                    _e.Draw(g, drawOffset);
+            }
+            foreach (Entity _e in Entity.entities)
+            {
+                if (_e.tag == "weapon")
+                    _e.Draw(g, drawOffset);
+            }
+            foreach (Entity _e in Entity.entities)
             {
                 if (_e.tag == "bullet")
                     _e.Draw(g, drawOffset);
             }
 
             player.Draw(g);
+
+            UIManager.Draw(g);
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
@@ -104,6 +145,11 @@ namespace GunfireGauntlet
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
             KeyHandler.KeyDetectionUp(e);
+        }
+
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

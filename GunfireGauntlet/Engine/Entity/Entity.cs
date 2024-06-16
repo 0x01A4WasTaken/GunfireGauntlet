@@ -1,4 +1,4 @@
-﻿using GunfireGauntlet.Engine.Essentials;
+﻿using GunfireGauntlet.Engine.Helper;
 using GunfireGauntlet.Engine.Physics;
 using System;
 using System.Collections.Generic;
@@ -51,20 +51,10 @@ namespace GunfireGauntlet.Engine.Entity
             this.tag = tag.ToLower();
         }
 
-        #region getters&setters
-
-        public void UpdateOldColliderValues() { col.SetOldValues(col.left, col.top); }
-        #endregion
-
         public virtual void Update()
         {
             if (animated)
                 spriteCounter++;
-        }
-
-        public void ColliderUpdater()
-        {
-            UpdateOldColliderValues();
         }
 
         public virtual void Draw(Graphics g)
@@ -99,6 +89,11 @@ namespace GunfireGauntlet.Engine.Entity
             Rectangle colRectOld = new Rectangle((int)col.old_x, (int)col.old_y, (int)Width, (int)Height);
             g.FillRectangle(brushRed, colRect);
             g.FillRectangle(brushGreen, colRectOld);
+        }
+
+        public virtual void Remove()
+        {
+            entities.Remove(this);
         }
     }
 }

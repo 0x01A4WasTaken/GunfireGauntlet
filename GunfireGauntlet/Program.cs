@@ -16,7 +16,7 @@ namespace GunfireGauntlet
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GameWindow());
+            Application.Run(new Engine.MainMenu());
         }
     }
 }

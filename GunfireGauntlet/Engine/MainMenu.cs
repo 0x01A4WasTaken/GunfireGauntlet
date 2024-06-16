@@ -12,6 +12,7 @@ namespace GunfireGauntlet.Engine
 {
     public partial class MainMenu : Form
     {
+
         public MainMenu()
         {
             InitializeComponent();
@@ -20,12 +21,19 @@ namespace GunfireGauntlet.Engine
 
         private void btnLoadGame_Click(object sender, EventArgs e)
         {
-            
+            GameWindow gameWindow = new GameWindow();
+            gameWindow.Show();
+            Hide();
         }
 
         private void btnControls_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

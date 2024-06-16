@@ -1,4 +1,4 @@
-﻿using GunfireGauntlet.Engine.Essentials;
+﻿using GunfireGauntlet.Engine.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace GunfireGauntlet.Engine.Entity.Enemies
 {
     internal class Enemy : Entity
     {
-        int health = 10;
+        public int health { get; private set; } = 10;
         int speed = 1;
         int damage = 1;
         bool onAttackCooldown = false;
@@ -39,7 +39,7 @@ namespace GunfireGauntlet.Engine.Entity.Enemies
 
         private void CheckPlayerCollision()
         {
-            if (Collider.CheckCollision(entities) == "player")
+            if (Collider.entitiesCollided.Contains(GameWindow.player))
             {
                 if(!onAttackCooldown)
                 {
@@ -59,6 +59,19 @@ namespace GunfireGauntlet.Engine.Entity.Enemies
                 Velocity = Vector2.Add(Velocity, new Vector2(0, -speed));
             if (Center.Y < e.Center.Y)
                 Velocity = Vector2.Add(Velocity, new Vector2(0, speed));
+        }
+
+        public void TakeDamage(int damage)
+        {
+            if ((health - damage) > 0)
+                health -= damage;
+            else if ((health - damage) <= 0)
+                health = 0;
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
         }
 
         public async void AttackCooldown()

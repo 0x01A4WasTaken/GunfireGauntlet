@@ -41,12 +41,11 @@
             this.btnLoadGame.BackColor = System.Drawing.Color.Transparent;
             this.btnLoadGame.FlatAppearance.BorderSize = 0;
             this.btnLoadGame.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLoadGame.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnLoadGame.Image = ((System.Drawing.Image)(resources.GetObject("btnLoadGame.Image")));
-            this.btnLoadGame.Location = new System.Drawing.Point(440, 400);
-            this.btnLoadGame.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnLoadGame.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnLoadGame.Name = "btnLoadGame";
-            this.btnLoadGame.Size = new System.Drawing.Size(400, 80);
+            this.btnLoadGame.Size = new System.Drawing.Size(800, 154);
+            this.btnLoadGame.Location = new System.Drawing.Point(240, 600);
             this.btnLoadGame.TabIndex = 0;
             this.btnLoadGame.UseVisualStyleBackColor = false;
             this.btnLoadGame.Click += new System.EventHandler(this.btnLoadGame_Click);
@@ -58,10 +57,10 @@
             this.btnControls.FlatAppearance.BorderSize = 0;
             this.btnControls.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnControls.Image = ((System.Drawing.Image)(resources.GetObject("btnControls.Image")));
-            this.btnControls.Location = new System.Drawing.Point(440, 500);
-            this.btnControls.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnControls.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnControls.Name = "btnControls";
-            this.btnControls.Size = new System.Drawing.Size(400, 80);
+            this.btnControls.Size = new System.Drawing.Size(800, 154);
+            this.btnControls.Location = new System.Drawing.Point(240, 800);
             this.btnControls.TabIndex = 1;
             this.btnControls.UseVisualStyleBackColor = false;
             this.btnControls.Click += new System.EventHandler(this.btnControls_Click);
@@ -72,26 +71,27 @@
             this.GameLogo.Cursor = System.Windows.Forms.Cursors.Default;
             this.GameLogo.Image = ((System.Drawing.Image)(resources.GetObject("GameLogo.Image")));
             this.GameLogo.InitialImage = null;
-            this.GameLogo.Location = new System.Drawing.Point(340, 100);
+            this.GameLogo.Location = new System.Drawing.Point(680, 192);
             this.GameLogo.Margin = new System.Windows.Forms.Padding(0);
             this.GameLogo.Name = "GameLogo";
-            this.GameLogo.Size = new System.Drawing.Size(600, 150);
+            this.GameLogo.Size = new System.Drawing.Size(1200, 288);
             this.GameLogo.TabIndex = 2;
             this.GameLogo.TabStop = false;
             // 
             // MainMenu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.ClientSize = new System.Drawing.Size(2528, 1310);
             this.Controls.Add(this.GameLogo);
             this.Controls.Add(this.btnControls);
             this.Controls.Add(this.btnLoadGame);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "MainMenu";
             this.Text = "GunfireGauntlet";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.GameLogo)).EndInit();
             this.ResumeLayout(false);
 

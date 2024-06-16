@@ -9,21 +9,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using GunfireGauntlet.Engine.Helper;
 
 namespace GunfireGauntlet.Engine.Tile
 {
     class MapConvertor
     {
-        static public void MaptoArray(ref string[,] array)
+        static public void MaptoArray(ref string[,] array, string filePath)
         {
             try
             {
                 int i = 0;
                 string data;
-                StreamReader streamReader = new StreamReader(Directory.GetCurrentDirectory() + @"\map01.csv");
+                StreamReader streamReader = new StreamReader(Directory.GetCurrentDirectory() + @"\mapFloor.csv");
                 while((data = streamReader.ReadLine()) != null)
                 {
-                    string[] s = data.Split(';');
+                    string[] s = data.Split(',');
                     for(int j = 0; j < s.Length; j++)
                     {
                         array[i, j] = s[j];
@@ -40,16 +41,17 @@ namespace GunfireGauntlet.Engine.Tile
 
         static public void MapLoader(ref List<Entity.Entity> entities, string[,] map, int tileSize)
         {
-            for(int i = 0; i < GameWindow.ROWS; i++)         // rows 
+            for(int i = 0; i < World.ROWS; i++)         // rows 
             {
-                for(int j = 0; j < GameWindow.COLUMNS; j++)     // columns
+                for(int j = 0; j < World.COLUMNS; j++)     // columns
                 {
                     if (TileManager.tileTemplates[map[i, j]].tile == true)
                     {
-                        Essentials.Vector2 pos = new Essentials.Vector2(j * GameWindow.TILESIZE, i * GameWindow.TILESIZE);
+                        Vector2 pos = new Vector2(j * GameWindow.TILESIZE, i * GameWindow.TILESIZE);
                         Tile e = new Tile(pos, tileSize, tileSize, TileManager.tileTemplates[map[i, j]].type);
-                        e.Collider.Solid= TileManager.tileTemplates[map[i, j]].solid;
-                        e.defaultBrush = TileManager.tileTemplates[map[i, j]].brush;
+                        e.Collider.Solid = TileManager.tileTemplates[map[i, j]].solid;
+                        try { e.SetImage(TileManager.tileTemplates[map[i,j]].image); } 
+                        catch { e.defaultBrush = TileManager.tileTemplates[map[i, j]].brush; }
                         entities.Add(e);
                     }
                 }

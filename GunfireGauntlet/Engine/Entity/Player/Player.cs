@@ -1,4 +1,5 @@
-﻿using GunfireGauntlet.Engine.Essentials;
+﻿using GunfireGauntlet.Engine.Helper;
+using GunfireGauntlet.Engine.Input;
 using GunfireGauntlet.Engine.Entity.Weapons;
 using GunfireGauntlet.Engine.Physics;
 using System;
@@ -18,50 +19,63 @@ namespace GunfireGauntlet.Engine.Entity.Player
     public class Player : Entity
     {
         private Image[] playerSprites = new Image[20];
+        public List<Bullet> bullets = new List<Bullet>();
         private int speed = 10;
 
-        public int health { get; private set; } = 5;
+        public Weapon equippedWeapon { get; private set; } = null;
+
+        private int health = 5;
+        public int Health
+        {
+            get { return health; }
+            set { if (value >= 0) health = value; }
+        }
+
 
         public int Speed { get; private set; }
 
-        private string spriteDirection = "right";
+        public string spriteDirection { get; private set; } = "right";
 
-        public bool isMoving { get; private set; }
-        private bool hit = false;
-        public bool Hit { get { return hit; } set { hit = value; } }
+        public bool IsMoving { get; private set; } = false;
+
+        public bool Hit { get; private set; } = false;
+        public bool Invulnerable { get; private set; } = false;
 
         public Player(Vector2 position, int height, int width) : base(position, height, width, true, "player")
         {
             try
             {
-                playerSprites[0] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_hit_f0.png");      // hit
-                playerSprites[1] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_idle_f0.png");     // idle
-                playerSprites[2] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_idle_f1.png");
-                playerSprites[3] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_idle_f2.png");
-                playerSprites[4] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_idle_f3.png");
-                playerSprites[5] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_idle_f4.png");     // left
-                playerSprites[6] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_idle_f5.png");
-                playerSprites[7] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_idle_f6.png");
-                playerSprites[8] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_idle_f7.png");
-                playerSprites[9] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_run_f0.png");      // run
-                playerSprites[10] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_run_f1.png");
-                playerSprites[11] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_run_f2.png");
-                playerSprites[12] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_run_f3.png");     
-                playerSprites[13] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_run_f4.png");     // left
-                playerSprites[14] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_run_f5.png");
-                playerSprites[15] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_run_f6.png");
-                playerSprites[16] = Image.FromFile(@"C:\Users\hamzasalim\source\repos\GunfireGauntlet\GunfireGauntlet\bin\Debug\res\player\knight_run_f7.png");
+                playerSprites[0] = Properties.Resources.knight_hit_f0;              // right
+                playerSprites[1] = Properties.Resources.knight_hit_f1;              // left 
+                playerSprites[2] = Properties.Resources.knight_idle_f0;             // right
+                playerSprites[3] = Properties.Resources.knight_idle_f1;
+                playerSprites[4] = Properties.Resources.knight_idle_f2;
+                playerSprites[5] = Properties.Resources.knight_idle_f3;
+                playerSprites[6] = Properties.Resources.knight_idle_f4;             // left
+                playerSprites[7] = Properties.Resources.knight_idle_f5;
+                playerSprites[8] = Properties.Resources.knight_idle_f6;
+                playerSprites[9] = Properties.Resources.knight_idle_f7;
+                playerSprites[10] = Properties.Resources.knight_run_f0;             // right 
+                playerSprites[11] = Properties.Resources.knight_run_f1;
+                playerSprites[12] = Properties.Resources.knight_run_f2;
+                playerSprites[13] = Properties.Resources.knight_run_f3;     
+                playerSprites[14] = Properties.Resources.knight_run_f4;             // left
+                playerSprites[15] = Properties.Resources.knight_run_f5;
+                playerSprites[16] = Properties.Resources.knight_run_f6;
+                playerSprites[17] = Properties.Resources.knight_run_f7;
             }
             catch
             {
                 MessageBox.Show("Player Sprites Not Found");
             }
-            isMoving = false;
+
+            equippedWeapon = new Gun(position);
         }
 
         public override void Update()
         {
             base.Update();
+
             if (spriteCounter > 6)
             {
                 switch (spriteNumber)
@@ -96,26 +110,21 @@ namespace GunfireGauntlet.Engine.Entity.Player
             Collider.TileCollisionDetection();
             Velocity = Vector2.Zero();
 
-            /*
-            if (Collider.CheckCollisionTagExclusion(this, Entity.entities, "enemy"))
-            {
-                SetPosition(Collider.oldx, Collider.oldy);
-            }
-            */
-
-            /*
-            ignore this
-            Slash();
-            */
+            equippedWeapon.Update();
         }
 
         public void TakeDamage(int value)
         {
+            if (Invulnerable)
+                return;
+
             int newHealth = health - value;
             if (newHealth < 0)
                 health = 0;
             else
                 health = newHealth;
+
+            InvulnerabilityCooldown();
         }
 
         public void CheckMovementKeys()
@@ -123,83 +132,63 @@ namespace GunfireGauntlet.Engine.Entity.Player
             Collider.SetOldValues(Position.X, Position.Y);
             if (KeyHandler.w == true)
             {
-                Velocity.Y = -speed;
-                isMoving = true;
+                Velocity.Y += -speed;
             }
             if (KeyHandler.a == true)
             {
-                Velocity.X = -speed;
-                isMoving = true;
+                Velocity.X += -speed;
                 spriteDirection = "left";
             }
             if (KeyHandler.s == true)
             {   
-                Velocity.Y = speed;
-                isMoving = true;
+                Velocity.Y += speed;
             }
 
             if (KeyHandler.d == true)
             {
-                Velocity.X = speed;
-                isMoving = true;
+                Velocity.X += speed;
                 spriteDirection = "right";
             }
 
-            if (!KeyHandler.w && !KeyHandler.a && !KeyHandler.s && !KeyHandler.d)       // not moving
-            {
-                isMoving = false;
-                Velocity = Vector2.Zero();
-            }
-
-            else if (KeyHandler.w && !KeyHandler.a && KeyHandler.s && !KeyHandler.d)    // moving in opposite directions
-            {
-                isMoving = false;
-                Velocity = Vector2.Zero();
-            }
-
-            else if (!KeyHandler.w && KeyHandler.a && !KeyHandler.s && KeyHandler.d)    // moving in opposite directions
-            {
-                isMoving = false;
-                Velocity = Vector2.Zero();
-            }
-        }
-
-        private void Slash()
-        {
-
-            if (KeyHandler.space)
-            {
-                Bullet bullet = new Bullet(Position);
-                bullet.Collider.Solid = false;
-                switch (spriteDirection)
-                {
-                    case "left":
-                        break;
-                    case "right":
-                        break;
-
-                }
-            }
+            if (Velocity.Magnitude == 0)
+                IsMoving = false;
+            else
+                IsMoving = true;
         }
         
         public override void Draw(Graphics g)
         {
+            
             switch (spriteDirection)
             {
                 case "left":
                     {
-                        if(isMoving)
-                            SetImage(playerSprites[13 + spriteNumber]);
+                        if (!Hit)
+                        {
+                            if(IsMoving)
+                                SetImage(playerSprites[14 + spriteNumber]);
+                            else
+                                SetImage(playerSprites[6 + spriteNumber]);
+                        }
                         else
-                            SetImage(playerSprites[5 + spriteNumber]);
-                        break;
+                        {
+                            SetImage(playerSprites[1]);
+                        }
+                       break;
                     }
                 case "right":
                     {
-                        if(isMoving)
-                            SetImage(playerSprites[9 + spriteNumber]);
+                        if (!Hit)
+                        {
+                            if(IsMoving)
+                                SetImage(playerSprites[10 + spriteNumber]);
+                            else
+                                SetImage(playerSprites[2 + spriteNumber]);
+                        }
                         else
-                            SetImage(playerSprites[1 + spriteNumber]);
+                        {
+                            SetImage(playerSprites[0]);
+                        }
                         break;
                     }
             }
@@ -210,6 +199,13 @@ namespace GunfireGauntlet.Engine.Entity.Player
                 g.DrawImage(GetImage(), (Screen.PrimaryScreen.Bounds.Width / 2) - (Width / 2) , (Screen.PrimaryScreen.Bounds.Height / 2) - (Height / 2), Width, Height);
         }
 
-
+        public async void InvulnerabilityCooldown()
+        {
+            Hit = true;
+            Invulnerable = true;
+            await Task.Delay(700);
+            Hit = false;
+            Invulnerable = false;
+        }
     }
 }

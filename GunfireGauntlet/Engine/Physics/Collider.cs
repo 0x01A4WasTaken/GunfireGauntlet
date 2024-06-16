@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Security.Policy;
-using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media;
-using GunfireGauntlet.Engine.Entity;
-using GunfireGauntlet.Engine.Entity.Player;
-using GunfireGauntlet.Engine.Essentials;
+using GunfireGauntlet.Engine.Helper;
 using GunfireGauntlet.Engine.Tile;
 
 namespace GunfireGauntlet.Engine.Physics
@@ -19,7 +12,7 @@ namespace GunfireGauntlet.Engine.Physics
     public class Collider
     {
         public List<Entity.Entity> entitiesCollided = new List<Entity.Entity>();
-        private Entity.Entity entity;
+        public Entity.Entity entity { get; private set; }
         public Vector2 entityCollisionVector = new Vector2();
         public float old_x { get; private set; }
         public float old_y { get; private set; }
@@ -56,10 +49,10 @@ namespace GunfireGauntlet.Engine.Physics
             old_y = y;
         }
 
-        public string CheckCollision(List<Entity.Entity> eList)                        // general
+        public Entity.Entity CheckCollision(List<Entity.Entity> eList)                        // general
         {
             bool value = false;
-            string returnTag = null;
+            Entity.Entity returnEntity = null;
             float t, b, r, l;
             foreach (Entity.Entity e in eList)
             {
@@ -76,9 +69,10 @@ namespace GunfireGauntlet.Engine.Physics
                     {
                         if (!entitiesCollided.Contains(e))
                             entitiesCollided.Add(e);
-                        ResolveCollision(e);
+                        if (Solid)
+                            ResolveCollision(e);
                         value = true;
-                        returnTag = e.tag;
+                        returnEntity = e;
                     }
                     else
                     {
@@ -89,7 +83,7 @@ namespace GunfireGauntlet.Engine.Physics
                 }
             }
             collision = value;
-            return returnTag;
+            return returnEntity;
         }
 
         private void ResolveCollision(Entity.Entity e)                                  // resolves collisions for non tile entities
@@ -132,47 +126,48 @@ namespace GunfireGauntlet.Engine.Physics
             }
         }
 
-        public void TileCollisionHandler(Tile.Tile.Type type, int row, int col)
+        public bool TileCollisionHandler(Tile.Tile.Type type, int row, int col)
         {
-            if (type == Tile.Tile.Type.None) return;
+            if (type == Tile.Tile.Type.None) return false;
             else if (type == Tile.Tile.Type.Top)
-                TopCollision(row);
+                return TopCollision(row);
             else if (type == Tile.Tile.Type.Bottom)
-                BottomCollision(row);
+                return BottomCollision(row);
             else if (type == Tile.Tile.Type.Right)
-                RightCollision(col);
+                return RightCollision(col);
             else if (type == Tile.Tile.Type.Left)
-                LeftCollision(col);
+                return LeftCollision(col);
             else if (type == Tile.Tile.Type.BottomLeft)
             {
-                BottomCollision(row);
-                LeftCollision(col);
+                return 
+                BottomCollision(row) || LeftCollision(col);
             }
             else if (type == Tile.Tile.Type.BottomRight)
             {
-                BottomCollision(row);
-                RightCollision(col);
+                return
+                BottomCollision(row) || RightCollision(col);
             }
             else if (type == Tile.Tile.Type.TopLeft)
             {
-                TopCollision(row);
-                LeftCollision(col);
+                return 
+                TopCollision(row) || LeftCollision(col);
             }
             else if (type == Tile.Tile.Type.TopRight)
             {
-                TopCollision(row);
-                RightCollision(col);
+                return
+                TopCollision(row) || RightCollision(col);
             }
             else if (type == Tile.Tile.Type.Full)
             {
                 if (LeftCollision(col))
-                    return;
+                    return true;
                 if (TopCollision(row))
-                    return;
+                    return true;
                 if (BottomCollision(row))
-                    return;
-                RightCollision(col);
+                    return true;
+                return RightCollision(col);
             }
+            return false;
         }
 
         public bool BottomCollision(int row)
@@ -239,8 +234,9 @@ namespace GunfireGauntlet.Engine.Physics
             return false;
         }
 
-        public void TileCollisionDetection()
+        public bool TileCollisionDetection()
         {
+            bool value = false;
             if (entity.Position.X < 0)
                 entity.Position.X = 0;                  // not letting player move out of world
             if (entity.Position.Y < 0)
@@ -252,19 +248,19 @@ namespace GunfireGauntlet.Engine.Physics
                 int bottomRow = (int)Math.Floor(bottom / GameWindow.TILESIZE);
                 try
                 {
-                    string tile = GameWindow.map[bottomRow, leftColumn];
+                    string tile = World.map[bottomRow, leftColumn];
                     // check bottom left corner
                     if (TileManager.tileTemplates[tile].tile == true)
                     {
-                        TileCollisionHandler(TileManager.tileTemplates[tile].type, bottomRow, leftColumn);
+                        value = TileCollisionHandler(TileManager.tileTemplates[tile].type, bottomRow, leftColumn);
                     }
 
                     int topRow = (int)Math.Floor(top / GameWindow.TILESIZE);
-                    tile = GameWindow.map[topRow, leftColumn];
+                    tile = World.map[topRow, leftColumn];
                     // check top left corner
                     if (TileManager.tileTemplates[tile].tile == true)
                     {
-                        TileCollisionHandler(TileManager.tileTemplates[tile].type, topRow, leftColumn);
+                        value = TileCollisionHandler(TileManager.tileTemplates[tile].type, topRow, leftColumn);
                     }
                 }
                 catch { }
@@ -273,23 +269,23 @@ namespace GunfireGauntlet.Engine.Physics
             }
             else if (entity.Position.X - old_x > 0)     // moving right
             {
-                int rightColumn = (int)Math.Floor(right / GameWindow.TILESIZE   );
+                int rightColumn = (int)Math.Floor(right / GameWindow.TILESIZE);
                 int bottomRow = (int)Math.Floor(bottom / GameWindow.TILESIZE);
                 try
                 {
-                    string tile = GameWindow.map[bottomRow, rightColumn];
+                    string tile = World.map[bottomRow, rightColumn];
                     // check the bottom right corner
                     if (TileManager.tileTemplates[tile].tile == true)
                     {
-                        TileCollisionHandler(TileManager.tileTemplates[tile].type, bottomRow, rightColumn);
+                        value = TileCollisionHandler(TileManager.tileTemplates[tile].type, bottomRow, rightColumn);
                     }
 
                     int topRow = (int)Math.Floor(top / GameWindow.TILESIZE);
-                    tile = GameWindow.map[topRow, rightColumn];
+                    tile = World.map[topRow, rightColumn];
                     // check top right corner
                     if (TileManager.tileTemplates[tile].tile == true)
                     {
-                        TileCollisionHandler(TileManager.tileTemplates[tile].type, topRow, rightColumn);
+                        value = TileCollisionHandler(TileManager.tileTemplates[tile].type, topRow, rightColumn);
                     }
                 }
                 catch { }
@@ -300,19 +296,19 @@ namespace GunfireGauntlet.Engine.Physics
                 int leftColumn = (int)Math.Floor(left / GameWindow.TILESIZE);
                 try
                 {
-                    string tile = GameWindow.map[topRow, leftColumn];
+                    string tile = World.map[topRow, leftColumn];
                     // check the top left corner
                     if (TileManager.tileTemplates[tile].tile == true)
                     {
-                        TileCollisionHandler(TileManager.tileTemplates[tile].type, topRow, leftColumn);
+                        value = TileCollisionHandler(TileManager.tileTemplates[tile].type, topRow, leftColumn);
                     }
 
                     int rightColumn = (int)Math.Floor(right / GameWindow.TILESIZE);
-                    tile = GameWindow.map[topRow, rightColumn];
+                    tile = World.map[topRow, rightColumn];
                     // check the top right corner
                     if (TileManager.tileTemplates[tile].tile == true)
                     {
-                        TileCollisionHandler(TileManager.tileTemplates[tile].type, topRow, rightColumn);
+                        value = TileCollisionHandler(TileManager.tileTemplates[tile].type, topRow, rightColumn);
                     }
                 }
                 catch { }
@@ -323,23 +319,24 @@ namespace GunfireGauntlet.Engine.Physics
                 int leftColumn = (int)Math.Floor(left / GameWindow.TILESIZE);
                 try
                 {
-                    string tile = GameWindow.map[bottomRow, leftColumn];
+                    string tile = World.map[bottomRow, leftColumn];
                     // check the bottom left corner
                     if (TileManager.tileTemplates[tile].tile == true)
                     {
-                        TileCollisionHandler(TileManager.tileTemplates[tile].type, bottomRow, leftColumn);
+                        value = TileCollisionHandler(TileManager.tileTemplates[tile].type, bottomRow, leftColumn);
                     }
 
                     int rightColumn = (int)Math.Floor(right / GameWindow.TILESIZE);
-                    tile = GameWindow.map[bottomRow, rightColumn];
+                    tile = World.map[bottomRow, rightColumn];
                     // check the bottom right corner
                     if (TileManager.tileTemplates[tile].tile == true)
                     {
-                        TileCollisionHandler(TileManager.tileTemplates[tile].type, bottomRow, rightColumn);
+                        value = TileCollisionHandler(TileManager.tileTemplates[tile].type, bottomRow, rightColumn);
                     }
                 }
                 catch { }
             }
+            return value;
         }
     }
 }

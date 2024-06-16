@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GunfireGauntlet.Engine.Entity;
-using GunfireGauntlet.Engine.Essentials;
+using GunfireGauntlet.Engine.Helper;
 
 namespace GunfireGauntlet.Engine.Tile
 {
