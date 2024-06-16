@@ -16,7 +16,7 @@ namespace GunfireGauntlet.Engine.Entity
         static private List<Entity> entityList = new List<Entity>();
         static public List<Entity> entities { get { return entityList; } }
 
-        public string tag { get; private set; }
+        public string Tag { get; private set; }
 
         private Vector2 position;
         public Vector2 Position
@@ -48,13 +48,49 @@ namespace GunfireGauntlet.Engine.Entity
             spriteNumber = 0;
             col = new Collider(this);
             entityList.Add(this);
-            this.tag = tag.ToLower();
+            this.Tag = tag.ToLower();
+        }
+
+        public void SetTag(string value)
+        {
+            if (value != Tag || string.IsNullOrEmpty(value))
+                Tag = value;
         }
 
         public virtual void Update()
         {
-            if (animated)
-                spriteCounter++;
+            if (!animated)
+                return;
+
+            spriteCounter++;
+            
+            if (spriteCounter > 6)
+            {
+                switch (spriteNumber)
+                {
+                    case 0:
+                        {
+                            spriteNumber = 1;
+                            break;
+                        }
+                    case 1:
+                        {
+                            spriteNumber = 2;
+                            break;
+                        }
+                    case 2:
+                        {
+                            spriteNumber = 3;
+                            break;
+                        }
+                    case 3:
+                        {
+                            spriteNumber = 0;
+                            break;
+                        }
+                }
+                spriteCounter = 0;
+            }
         }
 
         public virtual void Draw(Graphics g)

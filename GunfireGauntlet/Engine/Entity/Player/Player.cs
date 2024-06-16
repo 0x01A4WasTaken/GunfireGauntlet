@@ -24,7 +24,7 @@ namespace GunfireGauntlet.Engine.Entity.Player
 
         public Weapon equippedWeapon { get; private set; } = null;
 
-        private int health = 5;
+        private int health = 6;
         public int Health
         {
             get { return health; }
@@ -75,34 +75,6 @@ namespace GunfireGauntlet.Engine.Entity.Player
         public override void Update()
         {
             base.Update();
-
-            if (spriteCounter > 6)
-            {
-                switch (spriteNumber)
-                {
-                    case 0:
-                        {
-                            spriteNumber = 1;
-                            break;
-                        }
-                    case 1:
-                        {
-                            spriteNumber = 2;
-                            break;
-                        }
-                    case 2:
-                        {
-                            spriteNumber = 3;
-                            break;
-                        }
-                    case 3:
-                        {
-                            spriteNumber = 0;
-                            break;
-                        }
-                }
-                spriteCounter = 0;
-            }
             CheckMovementKeys();
 
             Position = Vector2.Add(Position, Velocity);

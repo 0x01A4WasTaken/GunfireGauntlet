@@ -24,9 +24,11 @@ namespace GunfireGauntlet.Engine.Tile
             None
         }
 
-        public Tile(Vector2 pos, int height, int width, Type type) : base(pos, height, width, false, "tile")
+        public Tile(Vector2 pos, int height, int width, Type type, bool overlay) : base(pos, height, width, false, "tile")
         {
             this.collisionType = type;
+            if (overlay)
+                SetTag("tileOverlay");
         }
     }
 }

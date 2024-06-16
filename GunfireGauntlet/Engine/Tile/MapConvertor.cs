@@ -21,7 +21,7 @@ namespace GunfireGauntlet.Engine.Tile
             {
                 int i = 0;
                 string data;
-                StreamReader streamReader = new StreamReader(Directory.GetCurrentDirectory() + @"\mapFloor.csv");
+                StreamReader streamReader = new StreamReader(Directory.GetCurrentDirectory() + @"\" + filePath);
                 while((data = streamReader.ReadLine()) != null)
                 {
                     string[] s = data.Split(',');
@@ -48,7 +48,7 @@ namespace GunfireGauntlet.Engine.Tile
                     if (TileManager.tileTemplates[map[i, j]].tile == true)
                     {
                         Vector2 pos = new Vector2(j * GameWindow.TILESIZE, i * GameWindow.TILESIZE);
-                        Tile e = new Tile(pos, tileSize, tileSize, TileManager.tileTemplates[map[i, j]].type);
+                        Tile e = new Tile(pos, tileSize, tileSize, TileManager.tileTemplates[map[i, j]].type, TileManager.tileTemplates[map[i,j]].overlay);
                         e.Collider.Solid = TileManager.tileTemplates[map[i, j]].solid;
                         try { e.SetImage(TileManager.tileTemplates[map[i,j]].image); } 
                         catch { e.defaultBrush = TileManager.tileTemplates[map[i, j]].brush; }
